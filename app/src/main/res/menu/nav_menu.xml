@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/ic_remote"
+        android:id="@id/dest_remote"
+        android:title="@string/remote"
+        />
+    <item
+        android:icon="@drawable/ic_local"
+        android:id="@id/dest_local"
+        android:title="@string/local"
+        />
+</menu>
