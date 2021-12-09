@@ -1,13 +1,12 @@
 package com.example.paging3sample.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.paging3sample.data.AppRepository
-import com.example.paging3sample.helper.Resource
-import com.example.paging3sample.model.ResponseMovies
+import com.example.paging3sample.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,15 +16,19 @@ class RemoteViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : ViewModel() {
 
-    private var _movies = MutableLiveData<Resource<ResponseMovies>>()
-    val movies: LiveData<Resource<ResponseMovies>> get() = _movies
+    init {
+        getPagerMovies()
+    }
 
-    fun getMovies() {
+    private lateinit var _movies: Flow<PagingData<Movie>>
+    val movies: Flow<PagingData<Movie>> get() = _movies
+
+    private fun getPagerMovies() {
 
         viewModelScope.launch {
 
-            appRepository.getMovies().collect {
-                _movies.postValue(it)
+            appRepository.getPagingMovies().collect {
+                _movies = appRepository.getPagingMovies()
             }
 
         }

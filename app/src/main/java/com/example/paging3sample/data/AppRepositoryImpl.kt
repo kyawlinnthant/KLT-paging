@@ -1,9 +1,16 @@
 package com.example.paging3sample.data
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.example.paging3sample.data.ws.ApiDataSource
+import com.example.paging3sample.data.ws.ApiService
+import com.example.paging3sample.data.ws.MoviePagerDataSource
 import com.example.paging3sample.di.QualifierAnnotation
 import com.example.paging3sample.helper.BaseNetworkResponse
 import com.example.paging3sample.helper.Resource
+import com.example.paging3sample.model.Movie
 import com.example.paging3sample.model.ResponseMovies
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class AppRepositoryImpl @Inject constructor(
     private val apiDataSource: ApiDataSource,
+    private val apiService: ApiService,
     @QualifierAnnotation.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AppRepository, BaseNetworkResponse() {
     override suspend fun getMovies(): Flow<Resource<ResponseMovies>> {
@@ -26,6 +34,13 @@ class AppRepositoryImpl @Inject constructor(
                 }
             )
         }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun getPagingMovies(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = PagingConfig(pageSize = 25, prefetchDistance = 2),
+            pagingSourceFactory = { MoviePagerDataSource(apiService)}
+        ).flow
     }
 
 }
