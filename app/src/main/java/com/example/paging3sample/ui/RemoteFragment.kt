@@ -18,6 +18,8 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
 
     private var adapter: MoviePagingDataAdapter? = null
     private val vm: RemoteViewModel by viewModels()
+    private var count = 0
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,8 +37,12 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
         with(vm) {
 
             viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+                (activity as MainActivity).addBadge(count++,1)
+
                 movies.collect {
                     adapter?.submitData(it)
+
+
                 }
             }
 

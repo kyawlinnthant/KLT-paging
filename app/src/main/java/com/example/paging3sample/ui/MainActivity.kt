@@ -8,8 +8,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.paging3sample.R
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -25,6 +27,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             )
         )
     }
+    private val navView by lazy {
+        findViewById<BottomNavigationView>(R.id.btn_nav_view)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -34,7 +39,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun setupNavigation() {
 
-        findViewById<BottomNavigationView>(R.id.btn_nav_view).setupWithNavController(navController)
+        navView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 }
