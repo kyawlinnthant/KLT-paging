@@ -2,4 +2,6 @@
     <string name="app_name">kltPaging</string>
     <string name="remote">Remote</string>
     <string name="local">Local</string>
+    <string name="loading_from_server">Loading from Server</string>
+    <string name="this_is_from_database_for_offline_support">This is from Database, for Offline Support!</string>
 </resources>

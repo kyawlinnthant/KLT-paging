@@ -1,5 +1,7 @@
 package com.example.paging3sample.di
 
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.paging3sample.BuildConfig
 import com.example.paging3sample.data.AppRepository
 import com.example.paging3sample.data.AppRepositoryImpl
@@ -7,6 +9,8 @@ import com.example.paging3sample.data.ws.ApiDataSource
 import com.example.paging3sample.data.ws.ApiDataSourceImpl
 import com.example.paging3sample.data.ws.ApiService
 import com.example.paging3sample.helper.Endpoints
+import com.example.paging3sample.model.Movie
+import com.example.paging3sample.ui.MoviePagingDataAdapter
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import dagger.Module
 import dagger.Provides

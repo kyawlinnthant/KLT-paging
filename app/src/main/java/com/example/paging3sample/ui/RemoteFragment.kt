@@ -18,6 +18,10 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
     private var adapter: MoviePagingDataAdapter? = null
     private val vm: RemoteViewModel by viewModels()
 
+    private val recyclerView by lazy {
+        requireActivity().findViewById<RecyclerView>(R.id.remote_recycler)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUi()
@@ -25,7 +29,6 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
     }
 
     private fun initUi() {
-
         setUpRecyclerView()
     }
 
@@ -36,22 +39,19 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
             viewLifecycleOwner.lifecycleScope.launchWhenCreated {
                 movies.collect {
                     adapter?.submitData(it)
-
-
                 }
             }
 
         }
     }
 
-
     private fun setUpRecyclerView() {
-        val v = requireActivity().findViewById<RecyclerView>(R.id.remote_recycler)
+
         adapter = MoviePagingDataAdapter { getItemClick(it) }.apply {
-            v.layoutManager =
+            recyclerView.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            v.adapter = this
-            v.adapter = withLoadStateHeaderAndFooter(
+            recyclerView.adapter = this
+            recyclerView.adapter = withLoadStateHeaderAndFooter(
                 header = MovieLoadStateAdapter(this),
                 footer = MovieLoadStateAdapter(this)
             )
@@ -66,3 +66,19 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
     }
 
 }
+
+/*
+
+private val loadingLayout by lazy {
+    requireActivity().findViewById<ConstraintLayout>(R.id.loading)
+}
+ private fun shouldShowLoading(isCompleted: Boolean) {
+        if (isCompleted) {
+            loadingLayout.visibility = View.VISIBLE
+            recyclerView.visibility = View.INVISIBLE
+        } else {
+            loadingLayout.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
+    }
+*/

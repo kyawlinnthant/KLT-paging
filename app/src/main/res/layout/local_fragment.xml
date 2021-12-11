@@ -22,20 +22,20 @@
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:padding="12dp"
-            android:text="This is from Database, for Offline Support!"
+            android:text="@string/this_is_from_database_for_offline_support"
             app:drawableLeftCompat="@drawable/ic_local" />
     </com.google.android.material.card.MaterialCardView>
 
+
     <androidx.recyclerview.widget.RecyclerView
-        tools:listitem="@layout/item_layout"
-        android:overScrollMode="never"
         android:id="@+id/local_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        tools:listitem="@layout/item_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

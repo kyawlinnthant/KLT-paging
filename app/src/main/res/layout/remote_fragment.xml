@@ -26,16 +26,29 @@
             app:drawableLeftCompat="@drawable/ic_remote" />
     </com.google.android.material.card.MaterialCardView>
 
+
     <androidx.recyclerview.widget.RecyclerView
-        tools:listitem="@layout/item_layout"
-        android:overScrollMode="never"
         android:id="@+id/remote_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        tools:listitem="@layout/item_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--
+ <include
+        android:id="@+id/loading"
+        layout="@layout/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="56dp"
+        tools:visibility="visible" />
+-->
