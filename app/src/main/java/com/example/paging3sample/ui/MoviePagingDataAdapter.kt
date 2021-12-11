@@ -4,11 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.paging3sample.R
 import com.example.paging3sample.databinding.ItemLayoutBinding
 import com.example.paging3sample.helper.Endpoints
 import com.example.paging3sample.model.Movie
@@ -38,7 +36,7 @@ class MoviePagingDataAdapter(
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .into(this.imageView)
             }
-            itemView.setOnClickListener { onClick }
+            itemView.setOnClickListener { onClick(absoluteAdapterPosition) }
         }
     }
 

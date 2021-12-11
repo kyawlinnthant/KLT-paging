@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Splash" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.Paging3Sample</item>
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo</item>
+    </style>
+</resources>

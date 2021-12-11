@@ -14,10 +14,4 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Splash" parent="Theme.SplashScreen">
-        <item name="postSplashScreenTheme">@style/Theme.Paging3Sample</item>
-        <item name="windowSplashScreenBackground">@color/teal_700</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
-        <item name="windowSplashScreenIconBackgroundColor">@color/teal_700</item>
-    </style>
 </resources>

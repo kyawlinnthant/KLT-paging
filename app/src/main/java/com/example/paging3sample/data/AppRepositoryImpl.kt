@@ -3,7 +3,6 @@ package com.example.paging3sample.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.liveData
 import com.example.paging3sample.data.ws.ApiDataSource
 import com.example.paging3sample.data.ws.ApiService
 import com.example.paging3sample.data.ws.MoviePagerDataSource
@@ -13,7 +12,6 @@ import com.example.paging3sample.helper.Resource
 import com.example.paging3sample.model.Movie
 import com.example.paging3sample.model.ResponseMovies
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -38,8 +36,13 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun getPagingMovies(): Flow<PagingData<Movie>> {
         return Pager(
-            config = PagingConfig(pageSize = 25, prefetchDistance = 2),
-            pagingSourceFactory = { MoviePagerDataSource(apiService)}
+            config = PagingConfig(
+                pageSize = 25,
+                maxSize = 25 + (25 * 2),
+                prefetchDistance = 2,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { MoviePagerDataSource(apiService) }
         ).flow
     }
 

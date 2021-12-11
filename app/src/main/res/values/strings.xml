@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Paging3Sample</string>
+    <string name="app_name">kltPaging</string>
     <string name="remote">Remote</string>
     <string name="local">Local</string>
 </resources>
