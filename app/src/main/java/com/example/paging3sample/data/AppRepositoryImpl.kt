@@ -35,10 +35,12 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPagingMovies(): Flow<PagingData<Movie>> {
+
+        val loadPageSize = MoviePagerDataSource.LOAD_SIZE
         return Pager(
             config = PagingConfig(
-                pageSize = 25,
-                maxSize = 25 + (25 * 2),
+                pageSize = loadPageSize,
+                maxSize = loadPageSize + (loadPageSize * 2),
                 prefetchDistance = 2,
                 enablePlaceholders = false
             ),
