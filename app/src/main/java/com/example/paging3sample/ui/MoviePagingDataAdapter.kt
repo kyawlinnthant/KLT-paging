@@ -1,5 +1,8 @@
 package com.example.paging3sample.ui
 
+import android.app.Activity
+import android.app.UiModeManager
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -7,11 +10,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.paging3sample.R
 import com.example.paging3sample.databinding.ItemLayoutBinding
 import com.example.paging3sample.helper.Endpoints
 import com.example.paging3sample.model.Movie
 
 class MoviePagingDataAdapter(
+    private val isDark : Boolean,
     private val onClick: (Int) -> Unit
 ) : PagingDataAdapter<Movie, RecyclerView.ViewHolder>(MovieComparator) {
 
@@ -27,14 +32,18 @@ class MoviePagingDataAdapter(
     inner class MovieViewHolder(private val binding: ItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+       private val placeholder = if (isDark)R.drawable.placeholder_dark else R.drawable.place_holder
+
         fun bind(item: Movie?) = with(binding) {
 
             item?.let {
-                this.textView.text = item.title
+                this.tvTitle.text = item.title
+                this.tvVote.text = item.vote_count.toString()
                 Glide.with(itemView.context)
-                    .load(Endpoints.IMAGE_URL + item.imageUrl)
+                    .load(Endpoints.IMAGE_URL + item.backdrop_path)
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .into(this.imageView)
+                    .placeholder(placeholder)
+                    .into(this.img)
             }
             itemView.setOnClickListener { onClick(absoluteAdapterPosition) }
         }

@@ -5,21 +5,26 @@ import androidx.paging.PagingState
 import com.example.paging3sample.helper.Endpoints
 import com.example.paging3sample.model.Movie
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
-class MoviePagerDataSource @Inject constructor(
-    private val apiService: ApiService
+class MoviePagingDataSource @Inject constructor(
+    private val apiService: ApiService,
+    private val type: String
 ) : PagingSource<Int, Movie>() {
 
     companion object {
-        const val INIT_PAGE = 1
-        const val LOAD_SIZE = 25
+        const val INIT_PAGE = 1 //start index to load
+        const val PAGE_SIZE = 20 //items per load
+        const val INITIAL_LOAD_SIZE = PAGE_SIZE * 2 //initial size of one load
+        const val MAX_SIZE = (PAGE_SIZE + INITIAL_LOAD_SIZE) * 10 //cache of the page to hold
     }
 
     //The refresh key is used for subsequent calls to PagingSource.Load after the initial load.
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-//        return INIT_PAGE
+
+//        return state.anchorPosition
 
         // We need to get the previous key (or next key if previous is null) of the page
         // that was closest to the most recently accessed index.
@@ -33,29 +38,25 @@ class MoviePagerDataSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
 
-        val position = params.key ?: INIT_PAGE
+        val currentPage = params.key ?: INIT_PAGE
 
         return try {
             val response = apiService.fetchMovies(
+                type,
                 Endpoints.API_KEY,
-                position
+                currentPage,
             )
             val pageResponse = response.body()
             val data = pageResponse?.results
-
-            // By default, initial load size = 3 * NETWORK PAGE SIZE
-            // ensure we're not requesting duplicating items at the 2nd request
-            val nextKey = if (data.isNullOrEmpty()) {
-                null
-            } else {
-//                pageIndex++
-                position + (params.loadSize / LOAD_SIZE)
-            }
+            val endOfPaginationReached = data.isNullOrEmpty()
+            val prevPage = if (currentPage == 1) null else currentPage - 1
+            val nextPage =
+                if (endOfPaginationReached) null else currentPage + (params.loadSize / PAGE_SIZE)
 
             LoadResult.Page(
                 data = data.orEmpty(),
-                prevKey = if (position == INIT_PAGE) null else position-1,
-                nextKey =  nextKey
+                prevKey = prevPage,
+                nextKey = nextPage
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

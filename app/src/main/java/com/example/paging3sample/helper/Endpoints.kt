@@ -10,6 +10,6 @@ object Endpoints {
     const val IMAGE_URL = "https://image.tmdb.org/t/p/original/"
 
     //URLs
-    const val GET_LIST_URL = "movie/popular"
+    const val GET_LIST_URL = "movie/{type}"
     const val GET_DETAIL_URL = "movie/{id}"
 }

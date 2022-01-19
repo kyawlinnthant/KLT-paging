@@ -2,7 +2,7 @@ package com.example.paging3sample.di
 
 import javax.inject.Qualifier
 
-class QualifierAnnotation {
+object QualifierAnnotation {
 
     @Retention(AnnotationRetention.RUNTIME)
     @Qualifier

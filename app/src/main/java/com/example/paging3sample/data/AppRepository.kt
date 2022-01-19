@@ -2,11 +2,11 @@ package com.example.paging3sample.data
 
 import androidx.paging.PagingData
 import com.example.paging3sample.helper.Resource
+import com.example.paging3sample.model.DetailResponse
 import com.example.paging3sample.model.Movie
-import com.example.paging3sample.model.ResponseMovies
 import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
-    suspend fun getMovies(): Flow<Resource<ResponseMovies>>
-    suspend fun getPagingMovies() : Flow<PagingData<Movie>>
+    suspend fun getPagingMovies(type: String) : Flow<PagingData<Movie>>
+    suspend fun getMovieDetail(id: Long,language : String) : Resource<DetailResponse>
 }

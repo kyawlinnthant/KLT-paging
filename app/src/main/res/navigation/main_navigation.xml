@@ -3,16 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/dest_remote">
+    app:startDestination="@id/dest_popular">
 
     <fragment
-        android:id="@+id/dest_local"
-        android:name="com.example.paging3sample.ui.LocalFragment"
-        android:label="@string/local"
-        tools:layout="@layout/local_fragment" />
+        tools:layout="@layout/fragment_upcoming"
+        android:id="@+id/dest_upcoming"
+        android:name="com.example.paging3sample.ui.list.UpcomingFragment"
+        android:label="@string/upcoming" >
+        <action
+            android:id="@+id/action_upcoming_to_detail"
+            app:destination="@id/dest_detail" >
+            <argument android:name="id"
+                app:argType="long" />
+        </action>
+    </fragment>
     <fragment
-        android:id="@+id/dest_remote"
-        android:name="com.example.paging3sample.ui.RemoteFragment"
-        android:label="@string/remote"
-        tools:layout="@layout/remote_fragment" />
+        tools:layout="@layout/fragment_popular"
+        android:id="@+id/dest_popular"
+        android:name="com.example.paging3sample.ui.list.PopularFragment"
+        android:label="@string/popular" >
+        <action
+            android:id="@+id/action_popular_to_detail"
+            app:destination="@id/dest_detail" >
+            <argument android:name="id"
+                app:argType="long" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/dest_detail"
+        android:name="com.example.paging3sample.ui.detail.DetailFragment"
+        android:label="@string/detail"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
 </navigation>

@@ -5,16 +5,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.paging3sample.data.ws.ApiDataSource
 import com.example.paging3sample.data.ws.ApiService
-import com.example.paging3sample.data.ws.MoviePagerDataSource
+import com.example.paging3sample.data.ws.MoviePagingDataSource
 import com.example.paging3sample.di.QualifierAnnotation
-import com.example.paging3sample.helper.BaseNetworkResponse
+import com.example.paging3sample.helper.Endpoints
 import com.example.paging3sample.helper.Resource
+import com.example.paging3sample.helper.safeApiCall
+import com.example.paging3sample.model.DetailResponse
 import com.example.paging3sample.model.Movie
-import com.example.paging3sample.model.ResponseMovies
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,30 +21,33 @@ import javax.inject.Singleton
 class AppRepositoryImpl @Inject constructor(
     private val apiDataSource: ApiDataSource,
     private val apiService: ApiService,
-    @QualifierAnnotation.IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : AppRepository, BaseNetworkResponse() {
-    override suspend fun getMovies(): Flow<Resource<ResponseMovies>> {
-        return flow {
-            emit(
-                safeApiCall {
-                    apiDataSource.getMovieList(1)
-                }
-            )
-        }.flowOn(ioDispatcher)
-    }
+) : AppRepository {
 
-    override suspend fun getPagingMovies(): Flow<PagingData<Movie>> {
 
-        val loadPageSize = MoviePagerDataSource.LOAD_SIZE
+    override suspend fun getPagingMovies(type: String): Flow<PagingData<Movie>> {
+
         return Pager(
             config = PagingConfig(
-                pageSize = loadPageSize,
-                maxSize = loadPageSize + (loadPageSize * 2),
+                pageSize = MoviePagingDataSource.PAGE_SIZE,
+                maxSize = MoviePagingDataSource.MAX_SIZE,
+                initialLoadSize = MoviePagingDataSource.INITIAL_LOAD_SIZE,
                 prefetchDistance = 2,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { MoviePagerDataSource(apiService) }
+            pagingSourceFactory = { MoviePagingDataSource(apiService, type) }
         ).flow
     }
 
+    override suspend fun getMovieDetail(
+        id: Long,
+        language: String
+    ): Resource<DetailResponse> {
+        val response = apiDataSource.fetchMovieDetail(
+            id,
+            Endpoints.API_KEY,
+            language
+        )
+
+        return safeApiCall { response }
+    }
 }

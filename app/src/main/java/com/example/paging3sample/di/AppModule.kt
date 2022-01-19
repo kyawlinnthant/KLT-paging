@@ -31,9 +31,8 @@ object AppModule {
     fun provideAppRepository(
         apiDataSource: ApiDataSource,
         apiService: ApiService,
-    @QualifierAnnotation.IoDispatcher ioDispatcher: CoroutineDispatcher
         ): AppRepository =
-        AppRepositoryImpl(apiDataSource,apiService,ioDispatcher)
+        AppRepositoryImpl(apiDataSource,apiService)
 
     @Provides
     @Singleton

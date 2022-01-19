@@ -1,23 +1,27 @@
-package com.example.paging3sample.ui
+package com.example.paging3sample.ui.list
 
+import android.app.Activity
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.paging3sample.R
+import com.example.paging3sample.data.ws.ApiDataSourceImpl
+import com.example.paging3sample.ui.MovieLoadStateAdapter
+import com.example.paging3sample.ui.MoviePagingDataAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class RemoteFragment : Fragment(R.layout.remote_fragment) {
+class UpcomingFragment : Fragment(R.layout.fragment_upcoming) {
 
     private var adapter: MoviePagingDataAdapter? = null
-    private val vm: RemoteViewModel by viewModels()
+
+    private val vm: ListViewModel by viewModels()
 
     private val recyclerView by lazy {
         requireActivity().findViewById<RecyclerView>(R.id.remote_recycler)
@@ -31,25 +35,27 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
 
     private fun initUi() {
         setUpRecyclerView()
+        vm.getPagerMovies(ApiDataSourceImpl.UPCOMING)
     }
 
     private fun observe() {
 
-        with(vm) {
+        vm.movies.observe(viewLifecycleOwner) {
 
             viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-                movies.collect {
-                    adapter?.submitData(it)
-                }
+                adapter?.submitData(it)
             }
-
         }
+
     }
 
     private fun setUpRecyclerView() {
 
-        adapter = MoviePagingDataAdapter { getItemClick(it) }.apply {
-            recyclerView.layoutManager = GridLayoutManager(requireContext(),2,GridLayoutManager.VERTICAL,false)
+        adapter = MoviePagingDataAdapter(isDarkTheme(requireActivity())) {
+            getItemClick(it)
+        }.apply {
+            recyclerView.layoutManager =
+                GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
 //                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             recyclerView.adapter = this
             recyclerView.adapter = withLoadStateHeaderAndFooter(
@@ -59,11 +65,15 @@ class RemoteFragment : Fragment(R.layout.remote_fragment) {
         }
     }
 
+    private fun isDarkTheme(activity: Activity): Boolean {
+        return activity.resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+    }
+
     private fun getItemClick(position: Int) {
         val item = adapter?.getClickItem(position)
-        item?.let {
-            Toast.makeText(context, item.title, Toast.LENGTH_SHORT).show()
-        }
+        val directions = UpcomingFragmentDirections.actionUpcomingToDetail(item?.id ?: 0L)
+        findNavController().navigate(directions)
     }
 
     override fun onDestroy() {
