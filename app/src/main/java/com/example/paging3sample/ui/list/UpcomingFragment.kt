@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.paging3sample.R
-import com.example.paging3sample.data.ws.ApiDataSourceImpl
+import com.example.paging3sample.data.AppRepositoryImpl
 import com.example.paging3sample.ui.MovieLoadStateAdapter
 import com.example.paging3sample.ui.MoviePagingDataAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +35,7 @@ class UpcomingFragment : Fragment(R.layout.fragment_upcoming) {
 
     private fun initUi() {
         setUpRecyclerView()
-        vm.getPagerMovies(ApiDataSourceImpl.UPCOMING)
+        vm.getPagerMovies(AppRepositoryImpl.UPCOMING)
     }
 
     private fun observe() {

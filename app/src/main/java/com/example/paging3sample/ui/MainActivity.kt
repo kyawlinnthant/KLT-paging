@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.paging3sample.R
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         setupNavigation()
     }
@@ -47,5 +48,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    fun setExpendToolbar(expended: Boolean, animated: Boolean = true) {
+        findViewById<AppBarLayout>(R.id.app_bar).setExpanded(expended, animated)
     }
 }

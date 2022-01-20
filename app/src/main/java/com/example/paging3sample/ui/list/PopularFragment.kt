@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.paging3sample.R
-import com.example.paging3sample.data.ws.ApiDataSourceImpl
+import com.example.paging3sample.data.AppRepositoryImpl
 import com.example.paging3sample.ui.MovieLoadStateAdapter
 import com.example.paging3sample.ui.MoviePagingDataAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,11 +35,10 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
 
     private fun initUi() {
         setUpRecyclerView()
-        vm.getPagerMovies(ApiDataSourceImpl.POPULAR)
+        vm.getPagerMovies(AppRepositoryImpl.POPULAR)
     }
 
     private fun observe() {
-
 
         vm.movies.observe(viewLifecycleOwner) {
             Timber.tag("popular").d(it.toString())
@@ -57,22 +56,24 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
     }
 
     private fun setUpRecyclerView() {
-
-        adapter =
-            MoviePagingDataAdapter(isDarkTheme(requireActivity())) { getItemClick(it) }.apply {
-                this.stateRestorationPolicy =
-                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                recyclerView.layoutManager = GridLayoutManager(
-                    requireContext(), 2,
-                    GridLayoutManager.VERTICAL, false
-                )
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            adapter =
+                MoviePagingDataAdapter(isDarkTheme(requireActivity())) { getItemClick(it) }.apply {
+                    this.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                    recyclerView.layoutManager = GridLayoutManager(
+                        requireContext(), 2,
+                        GridLayoutManager.VERTICAL, false
+                    )
 //                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                recyclerView.adapter = this
-                recyclerView.adapter = withLoadStateHeaderAndFooter(
-                    header = MovieLoadStateAdapter(this),
-                    footer = MovieLoadStateAdapter(this)
-                )
-            }
+                    recyclerView.adapter = this
+                    recyclerView.adapter = withLoadStateHeaderAndFooter(
+                        header = MovieLoadStateAdapter(this),
+                        footer = MovieLoadStateAdapter(this)
+                    )
+                }
+        }
+
+
     }
 
     private fun getItemClick(position: Int) {

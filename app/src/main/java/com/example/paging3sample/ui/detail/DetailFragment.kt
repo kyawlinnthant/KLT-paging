@@ -16,6 +16,7 @@ import com.example.paging3sample.R
 import com.example.paging3sample.helper.Endpoints
 import com.example.paging3sample.helper.Resource
 import com.example.paging3sample.model.DetailResponse
+import com.example.paging3sample.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +34,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).setExpendToolbar(true)
         initUi()
         observe()
     }

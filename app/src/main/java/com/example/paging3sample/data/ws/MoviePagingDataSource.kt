@@ -17,8 +17,8 @@ class MoviePagingDataSource @Inject constructor(
     companion object {
         const val INIT_PAGE = 1 //start index to load
         const val PAGE_SIZE = 20 //items per load
-        const val INITIAL_LOAD_SIZE = PAGE_SIZE * 2 //initial size of one load
-        const val MAX_SIZE = (PAGE_SIZE + INITIAL_LOAD_SIZE) * 10 //cache of the page to hold
+//        const val INITIAL_LOAD_SIZE = PAGE_SIZE * 2 //initial size of one load
+//        const val MAX_SIZE = (PAGE_SIZE + INITIAL_LOAD_SIZE) * 10 //cache of the page to hold
     }
 
     //The refresh key is used for subsequent calls to PagingSource.Load after the initial load.
@@ -48,14 +48,14 @@ class MoviePagingDataSource @Inject constructor(
             )
             val pageResponse = response.body()
             val data = pageResponse?.results
-            val endOfPaginationReached = data.isNullOrEmpty()
             val prevPage = if (currentPage == 1) null else currentPage - 1
+            val endOfPaginationReached = data.isNullOrEmpty()
             val nextPage =
                 if (endOfPaginationReached) null else currentPage + (params.loadSize / PAGE_SIZE)
 
             LoadResult.Page(
                 data = data.orEmpty(),
-                prevKey = prevPage,
+                prevKey = null, //nextPage ( we use forward only )prevPage,
                 nextKey = nextPage
             )
         } catch (e: Exception) {

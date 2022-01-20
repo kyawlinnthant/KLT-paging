@@ -25,7 +25,7 @@ class ListViewModel @Inject constructor(
 
     fun getPagerMovies(type: String) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             val data = appRepository.getPagingMovies(type)
             data.collect {
                 _movies.postValue(it)
